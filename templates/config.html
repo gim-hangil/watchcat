@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block app %}
+    <div class="main">
+      <form>
+        <div>
+          <label for="week">현재 주차를 </label>
+          <select name="week" id="week">
+            {% for week in weeks %}
+              <option value="{{ week.id }}" {% if week.id == current_week_id %}selected{% endif %}>{{ week.label }}</option>
+            {% endfor %}
+          </select>로
+          <button onclick="">설정</button>
+        </div>
+        <div>
+          <input type="number" id="weeks_ahead" name="weeks_ahead" min="1" max="4" value="{{ weeks_ahead }}">주 후를
+          <select name="week" id="week">
+            {% for week in weeks %}
+              <option value="{{ week.id }}" {% if week.id == current_week_id %}selected{% endif %}>{{ week.label }}</option>
+            {% endfor %}
+          </select>로
+          <button onclick="">설정</button>
+        </div>
+        <div>
+          <button onclick="">다음 주차로 넘어가기</button>
+        </div>
+      </form>
+    </div>
+    <div class="link" onclick="location.href='/'">
+      메인으로
+    </div>
+{% endblock %}

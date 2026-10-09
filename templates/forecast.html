@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block app %}
+    <div class="level">
+      <h3>4주간 위험 예보</h3>
+    </div>
+    <div class="main">
+      {% for week in forecast %}
+      <div class="tip">
+        <div>{{ week['week'] }}주: <span class="{{ week['level']['class'] }}">{{ week['level']['label'] }}단계</span></div><br>
+        <div>조심해야 할 안전사고: <strong>{{ week['job'] }}</strong></div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="link" onclick="location.href='/'">
+      메인으로
+    </div>
+{% endblock %}

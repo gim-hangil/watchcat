@@ -1,0 +1,148 @@
+@import url('https://cdn.jsdelivr.net/npm/@catppuccin/palette/css/catppuccin.css');
+
+:root {
+    background-color: var(--ctp-mocha-base);
+}
+
+* {
+    color: var(--ctp-mocha-text);
+    font-family: 'NanumGothic';
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2 {
+    color: var(--ctp-mocha-text);
+}
+
+h3, h4 {
+    color: var(--ctp-mocha-subtext0);
+}
+
+h5, h6 {
+    color: var(--ctp-mocha-subtext1);
+}
+
+strong {
+    font-family: 'NanumGothicExtraBold';
+    text-decoration: underline;
+}
+
+a {
+    color: var(--ctp-mocha-blue);
+}
+
+::selection {
+    background-color: rgba(var(--ctp-mocha-ovarlay2-rgb) / 0.2);
+}
+
+.safe-area {
+    height: 3em;
+}
+
+.app {
+    max-width: 320px;
+    margin: 1em auto;
+}
+
+.heading, .level, .main, .statistics, .link, .admin {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.headline {
+    font-size: 1.5em;
+    font-family: 'NanumGothicExtraBold';
+    color: var(--ctp-mocha-text);
+}
+
+.good, .warning, .danger {
+    font-family: 'NanumGothicBold';
+    border-radius: 2em;
+    padding: 2px 0.5em;
+}
+
+.good {
+    color: var(--ctp-mocha-green);
+    background-color: rgba(var(--ctp-mocha-green-rgb) / 0.2);
+    border: 1px solid var(--ctp-mocha-green);
+}
+
+.warning {
+    color: var(--ctp-mocha-yellow);
+    background-color: rgba(var(--ctp-mocha-yellow-rgb) / 0.2);
+    border: 1px solid var(--ctp-mocha-yellow);
+}
+
+.danger {
+    color: var(--ctp-mocha-red);
+    background-color: rgba(var(--ctp-mocha-red-rgb) / 0.2);
+    border: 1px solid var(--ctp-mocha-red);
+}
+
+.icon {
+    display: block;
+    margin: 0 auto;
+    border-radius: 100%;
+    border: 3px solid var(--ctp-mocha-surface1);
+}
+
+.statistics {
+    padding: 0.5em 1em;
+    border-radius: 1em;
+    background-color: var(--ctp-mocha-surface1);
+}
+
+.statistics-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5em;
+}
+
+.statistics-info:last-child {
+    margin-bottom: 0;
+}
+
+.most-danger {
+    text-align: left;
+}
+
+.link {
+    padding: 0.5em 1em;
+    border-radius: 1em;
+    background-color: var(--ctp-mocha-overlay2);
+    color: var(--ctp-mocha-base);
+}
+
+.link:hover {
+    cursor: pointer;
+}
+
+.tip {
+    line-height: 1.2;
+    text-align: left;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    margin-bottom: 0.5em;
+    background-color: var(--ctp-mocha-surface1);
+}
+
+.tip:last-child {
+    margin-bottom: 0;
+}
+
+form div {
+    text-align: left;
+    line-height: 1.6;
+}
+
+input, select, button {
+    border: 1px solid var(--ctp-mocha-text);
+    border-radius: 3px;
+    background-color: var(--ctp-mocha-surface0);
+}

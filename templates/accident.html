@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block app %}
+    <div class="main">
+      <form method="post" action="/api/accident">
+        <div>
+          <label for="week_id">주차: </label>
+          <select name="week_id" id="week_id">
+            {% for week in weeks %}
+              <option value="{{ week.id }}">{{ week.label }}</option>
+            {% endfor %}
+          </select>
+        <div>
+          <label for="station">발생 장소: </label>
+          <select name="station" id="station">
+            {% for station in stations %}
+            <option value="{{ station.id }}">{{ station.location }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label for="accident_id">사고 유형: </label>
+          <select name="accident_id" id="accident_id">
+            {% for accident in accidents %}
+            <option value="{{ accident.id }}">{{ accident.label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label for="another_accident">기타 사고 유형: </label>
+          <input type="text" id="another_accident" name="another_accident" placeholder="발생한 사고가 위 사고유형에 없는 경우에만 작성해주세요.">
+        </div>
+        <div>
+          <label for="timestamp">발생 일시: </label>
+          <input type="datetime-local" id="timestamp" name="timestamp">
+        </div>
+        <div>
+          <input type="submit" value="제출" />
+        </div>
+      </form>
+    </div>
+    <div class="link" onclick="location.href='/'">
+      메인으로
+    </div>
+{% endblock %}

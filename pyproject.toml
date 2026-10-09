@@ -1,0 +1,33 @@
+[project]
+name = "watchcat"
+version = "0.1.0"
+description = "Handy safety watchdog — but it's a cat."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastapi[standard]>=0.128.8",
+    "python-multipart>=0.0.32",
+    "requests>=2.32.5",
+    "sqlmodel>=0.0.34",
+]
+license = "MIT"
+license-files = ["LICENCE"]
+
+[project.urls]
+Homepage = "https://github.com/gim-hangil/watchcat"
+Repository = "https://github.com/gim-hangil/watchcat.git"
+Issues = "https://github.com/gim-hangil/watchcat/issues"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.fastapi]
+entrypoint = "src.watchcat.main:app"
+
+[tool.pyrefly]
+project-includes = [
+    "**/*.py*",
+    "**/*.ipynb",
+]

@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block app %}
+    <div class="level">
+      <h3>현재 <span class="{{ today['level']['class'] }}">{{ today['level']['label'] }} 단계</span></h3>
+    </div>
+    <div class="main">
+      <img class="icon" src="/static/cat_{{ today['level']['class'] }}.svg" width="50%">
+    </div>
+    <div class="statistics">
+      <h3>주요 안전 현황</h3><br>
+      <div class="statistics-info most-danger">
+        <span>조심해야 할 안전사고: <strong>{{ today['job'] }}</strong></span>
+      </div>
+      <div class="statistics-info temperature">
+        🔥 온도: <span class="{{ today['temp']['class'] }}">{{ today['temp']['label'] }}</span>
+      </div>
+      <div class="statistics-info rain">
+        🌧 강우: <span class="{{ today['rain']['class'] }}">{{ today['rain']['label'] }}</span>
+      </div>
+      <div class="statistics-info air">
+        😷 공기질: <span class="{{ today['air']['class'] }}">{{ today['air']['label'] }}</span>
+      </div>
+    </div>
+    <div class="link" onclick="location.href='/details'">
+      지금의 세부사항 보러가기
+    </div>
+    <div class="link" onclick="location.href='/forecast'">
+      위험성 예보 확인하기
+    </div>
+    <div class="admin">
+      <a href="/accident">사고 등록</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="/config">설정</a>
+    </div>
+{% endblock %}

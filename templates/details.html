@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block app %}
+    <div class="level">
+      <h3>41주차: 전투진지공사주</h3>
+    </div>
+    <div class="statistics">
+      <h3>현재 위험 지수</h3><br>
+      {% for job in jobs %}
+      <div class="statistics-info">
+        {{ job['job'] }}: <span class="{{ job['level']['class'] }}">{{ job['level']['label'] }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="main">
+      <div class="tips">
+        {% for tip in tips %}
+        <div class="tip">
+          {{ tip }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="link" onclick="location.href='/'">
+      메인으로
+    </div>
+{% endblock %}
