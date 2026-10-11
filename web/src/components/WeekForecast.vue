@@ -12,10 +12,14 @@ onMounted(async () => {
 });
 
 async function fetchSafety() {
-  if (props.week_id !== null && props.week_id !== undefined) {
+  if (props.week_id.value !== null && props.week_id.value !== undefined) {
     const res = await fetch(`/api/forecast?week_id=${props.week_id}`);
-    const data = await res.json();
-    safety.value = data;
+    if (res.ok) {
+      const data = await res.json();
+      safety.value = data;
+    } else {
+      console.error(`Failed to fetch safety data for week #${props.week_id}`);
+    }
   }
 }
 </script>

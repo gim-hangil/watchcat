@@ -1,6 +1,7 @@
 import fastapi
 import fastapi.responses
 import pydantic
+import sqlalchemy.exc
 import sqlmodel
 from collections.abc import Sequence
 from typing import Annotated
@@ -141,6 +142,12 @@ def get_accident_types(session: db.SessionDep) -> Sequence[db.AccidentType]:
 @app.get("/forecast")
 def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
     TERM = 365 * 24 * 60 * 60
+    try:
+        currentWeekLabel = session.exec(
+            sqlmodel.select(db.Week).where(db.Week.id == week_id)
+        ).one().label
+    except sqlalchemy.exc.NoResultFound:
+        return SafetyLevel(job="", level=0)
     total_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
@@ -159,9 +166,7 @@ def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
         ).all()
     )
     types_of_weeks = len(session.exec(sqlmodel.select(db.Week)).all())
-    currentWeekLabel = session.exec(
-        sqlmodel.select(db.Week).where(db.Week.id == week_id)
-    ).one().label
+
     if total_accidents > 0:
         probability = possible_accidents * types_of_weeks / total_accidents
         return SafetyLevel(
