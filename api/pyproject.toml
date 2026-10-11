@@ -1,0 +1,25 @@
+[project]
+name = "watchcat-api"
+version = "0.1.0"
+description = "REST API server for WatchCat."
+authors = [
+    { name = "Gim Hangil", email = "gim_hangil@kakao.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastapi[standard]>=0.143.0",
+    "requests>=2.34.2",
+    "sqlmodel>=0.0.48",
+]
+license = "MIT"
+
+[project.scripts]
+watchcat-api = "watchcat_api:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.fastapi]
+entrypoint = "src.watchcat_api:app"
