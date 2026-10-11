@@ -40,10 +40,14 @@ def get_current_safety_level(
         ).all()
     )
     types_of_weeks = len(session.exec(sqlmodel.select(db.Week)).all())
-    probability = possible_accidents * types_of_weeks / total_accidents
-    return SafetyLevel(
-        level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2
-    )
+    if total_accidents > 0:
+        probability = possible_accidents * types_of_weeks / total_accidents
+        return SafetyLevel(
+            level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2
+        )
+    else:
+        return SafetyLevel(
+        level=0)
 
 
 @app.get("/level/{station_id}/temperature")
