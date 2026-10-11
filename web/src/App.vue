@@ -13,13 +13,14 @@ onMounted(() => {
 function loadLocalStorage() {
   try {
     station_id.value = JSON.parse(localStorage.getItem("station_id")) || 0;
-    week.value = JSON.parse(localStorage.getItem("week"));
+    week.value = JSON.parse(localStorage.getItem("week")) || [0, 0, 0, 0, 0];
   } catch {
     console.error(
       "Error loading data from localStorage. Initializing with default values.",
     );
     station_id.value = 0;
-    week.value = [];
+    week.value = [0, 0, 0, 0, 0];
+  } finally {
     localStorage.setItem("station_id", JSON.stringify(station_id.value));
     localStorage.setItem("week", JSON.stringify(week.value));
   }
