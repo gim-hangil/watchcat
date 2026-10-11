@@ -13,7 +13,14 @@ const temperature = ref(0);
 const rain = ref(0);
 const air = ref(0);
 
-onMounted(async () => {
+onMounted(() => {
+  fetchMostRisk();
+  fetchTemperature();
+  fetchRain();
+  fetchAir();
+});
+
+async function fetchMostRisk() {
   try {
     const res = await fetch(`/api/risk?week_id=${props.week[0] || 0}`);
     const data = await res.json();
@@ -21,6 +28,9 @@ onMounted(async () => {
   } catch (err) {
     console.error(err.message);
   }
+}
+
+async function fetchTemperature() {
   try {
     const res = await fetch(
       `/api/level/${props.station_id}/temperature?week_id=${props.week[0] || 0}`,
@@ -30,6 +40,9 @@ onMounted(async () => {
   } catch (err) {
     console.error(err.message);
   }
+}
+
+async function fetchRain() {
   try {
     const res = await fetch(
       `/api/level/${props.station_id}/rain?week_id=${props.week[0] || 0}`,
@@ -39,6 +52,9 @@ onMounted(async () => {
   } catch (err) {
     console.error(err.message);
   }
+}
+
+async function fetchAir() {
   try {
     const res = await fetch(
       `/api/level/${props.station_id}/air?week_id=${props.week[0] || 0}`,
@@ -48,7 +64,7 @@ onMounted(async () => {
   } catch (err) {
     console.error(err.message);
   }
-});
+}
 </script>
 
 <template>
