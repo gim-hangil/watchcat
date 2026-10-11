@@ -5,7 +5,7 @@ __`watchcat`__ is safety watchdog &mdash; but it's a __*cat*__.
 ## Requirements
 
 * `uv` for managing python environment
-* `npm` for building frontend
+* `node` for building frontend
 
 > The other dependencies will be installed during deployment using `uv` and
   `npm`.
