@@ -182,7 +182,6 @@ def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
 def add_accident(
     session: db.SessionDep, accident: db.Accident
 ) -> fastapi.responses.RedirectResponse:
-    print(accident)
     try:
         session.add(accident)
         session.commit()
