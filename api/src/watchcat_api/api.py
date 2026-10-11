@@ -101,7 +101,10 @@ def get_current_most_risks(
                 )
             ).all()
         )
-        probability = accident_count // total_accidents * len(accident_types)
+        if total_accidents > 0:
+            probability = accident_count // total_accidents * len(accident_types)
+        else:
+            probability = 0
         risks.append(
             SafetyLevel(
                 job=accident_type.label,
@@ -156,14 +159,18 @@ def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
         ).all()
     )
     types_of_weeks = len(session.exec(sqlmodel.select(db.Week)).all())
-    probability = possible_accidents * types_of_weeks / total_accidents
     currentWeekLabel = session.exec(
         sqlmodel.select(db.Week).where(db.Week.id == week_id)
     ).one().label
-    return SafetyLevel(
-        job=currentWeekLabel,
-        level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2
-    )
+    if total_accidents > 0:
+        probability = possible_accidents * types_of_weeks / total_accidents
+        return SafetyLevel(
+            job=currentWeekLabel,
+            level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2
+        )
+    else:
+        return SafetyLevel(
+            job=currentWeekLabel, level=0)
 
 
 @app.post("/accident")
