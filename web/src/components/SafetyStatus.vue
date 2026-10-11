@@ -8,6 +8,7 @@ const props = defineProps({
   week: Array,
 });
 
+const most_risk = ref("");
 const temperature = ref(0);
 const rain = ref(0);
 const air = ref(0);
@@ -15,7 +16,7 @@ const air = ref(0);
 onMounted(async () => {
   try {
     const res = await fetch(
-      `/api/level/${props.station_id}/temperature?week=${props.week[0] || 0}`,
+      `/api/level/${props.station_id}/temperature?week_id=${props.week[0] || 0}`,
     );
     const data = await res.json();
     temperature.value = data.level;
@@ -24,7 +25,7 @@ onMounted(async () => {
   }
   try {
     const res = await fetch(
-      `/api/level/${props.station_id}/rain?week=${props.week[0] || 0}`,
+      `/api/level/${props.station_id}/rain?week_id=${props.week[0] || 0}`,
     );
     const data = await res.json();
     rain.value = data.level;
@@ -33,7 +34,7 @@ onMounted(async () => {
   }
   try {
     const res = await fetch(
-      `/api/level/${props.station_id}/air?week=${props.week[0] || 0}`,
+      `/api/level/${props.station_id}/air?week_id=${props.week[0] || 0}`,
     );
     const data = await res.json();
     air.value = data.level;
