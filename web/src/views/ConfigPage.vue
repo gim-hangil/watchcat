@@ -66,6 +66,24 @@ function reset_week() {
   emit("update");
 }
 
+function next_week() {
+  let week;
+  try {
+    week = JSON.parse(window.localStorage.getItem("week"));
+    for (let i = 0; i < week_models.length; i++) {
+      week_models[i].value = week_models[i + 1].value;
+      week[i] = week_models[i].value;
+    }
+  } catch {
+    console.error(
+      "Error parsing week data from localStorage. Initializing new week data.",
+    );
+    week = [0, 0, 0, 0, 0];
+  }
+  window.localStorage.setItem("week", JSON.stringify(week));
+  emit("update");
+}
+
 function submit_station() {
   if (!station_id_model.value) {
     alert("장소를 선택해주세요.");
@@ -107,6 +125,9 @@ function reset_station() {
     </div>
     <div class="input">
       <button class="submit" @click="submit_week()">저장</button>
+    </div>
+    <div class="input">
+      <button class="next" @click="next_week()">다음주로</button>
     </div>
     <div class="input">
       <button class="reset" @click="reset_week()">초기화</button>
