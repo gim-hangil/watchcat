@@ -3,10 +3,9 @@ import fastapi
 import os
 import re
 import sqlmodel
-import sqlalchemy.exc
 from collections.abc import Sequence
 from typing import Annotated
-from . import kma
+from . import kma, utils
 
 dotenv.load_dotenv()
 DB_URL = os.environ.get("DB_URL", "sqlite:///test.db")
@@ -23,37 +22,7 @@ def create_db_and_tables():
     sqlmodel.SQLModel.metadata.create_all(engine)
     # FIXME: There should be a admin page to edit week data.
     # But for now, we just insert the week data here.
-    try:
-        with sqlmodel.Session(engine) as session:
-            session.add_all(
-                [
-                    Week(id=1, label="자율적 부대운영"),
-                    Week(id=2, label="훈련 준비"),
-                    Week(id=3, label="전술훈련"),
-                    Week(id=4, label="훈련 후 정비"),
-                    Week(id=5, label="전투진지공사"),
-                    Week(id=6, label="집중정신전력교육"),
-                    Week(id=7, label="집중인성교육"),
-                    Week(id=8, label="주특기 훈련"),
-                ]
-            )
-            session.commit()
-    except sqlalchemy.exc.IntegrityError:
-        pass
-    try:
-        with sqlmodel.Session(engine) as session:
-            session.add_all(
-                [
-                    AccidentType(id=1, label="식중독"),
-                    AccidentType(id=2, label="온열손상"),
-                    AccidentType(id=3, label="낙상"),
-                    AccidentType(id=4, label="화재"),
-                    AccidentType(id=5, label="교통사고"),
-                ]
-            )
-            session.commit()
-    except sqlalchemy.exc.IntegrityError:
-        pass
+    utils.insert_default_data(engine)
 
 
 class ASOS(sqlmodel.SQLModel, table=True):
@@ -151,6 +120,12 @@ class Accident(sqlmodel.SQLModel, table=True):
 class Week(sqlmodel.SQLModel, table=True):
     id: int = sqlmodel.Field(primary_key=True, default=None)
     label: str
+
+
+class SafetyTip(sqlmodel.SQLModel, table=True):
+    id: int = sqlmodel.Field(primary_key=True, default=None)
+    accident_id: int = sqlmodel.Field(foreign_key="accidenttype.id")
+    tip: str
 
 
 SessionDep = Annotated[sqlmodel.Session, fastapi.Depends(get_session)]

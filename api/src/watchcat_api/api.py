@@ -13,6 +13,7 @@ DANGER_FACTOR = 1.5
 
 
 class SafetyLevel(pydantic.BaseModel):
+    id: int = 0
     job: str = ""
     level: int
 
@@ -105,6 +106,7 @@ def get_current_most_risks(
             probability = 0
         risks.append(
             SafetyLevel(
+                id=accident_type.id,
                 job=accident_type.label,
                 level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2,
             )
@@ -125,9 +127,14 @@ def get_station_data(session: db.SessionDep) -> Sequence[db.Station]:
     return station_data
 
 
-@app.get("/tip")
-def get_tips(session: db.SessionDep) -> list[str]:
-    return ["준비 중...", "오늘의 안전사고 예방을 위한 팁을 알려드립니다."]
+@app.get("/tip/{accident_id}")
+def get_tips(session: db.SessionDep, accident_id: int) -> Sequence[db.SafetyTip]:
+    try:
+        tips = utils.fetch_safety_tips(session, accident_id)
+    except:
+        return []
+    print(tips)
+    return tips
 
 
 @app.get("/accident")

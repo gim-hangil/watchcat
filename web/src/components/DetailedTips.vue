@@ -1,18 +1,34 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref, watch } from "vue";
 import SurfaceElement from "@/components/SurfaceElement.vue";
-/* load week data from the local storage and request safety data to the server. */
+
+const props = defineProps({
+  week: Array,
+  station_id: Number,
+  risks: Array,
+});
 const tips = ref([]);
 
-onMounted(async () => {
+watch(
+  () => props.risks,
+  async () => {
+    tips.value = [];
+    for (let risk of props.risks) {
+      tips.value.push(...(await getTips(risk.id)));
+    }
+  },
+);
+
+async function getTips(accident_id) {
   try {
-    const res = await fetch("/api/tip");
+    const res = await fetch(`/api/tip/${accident_id}`);
     const data = await res.json();
-    tips.value = data;
+    return [data[Math.floor(Math.random() * data.length)]];
   } catch (err) {
     console.error(err.message);
+    return [];
   }
-});
+}
 </script>
 
 <template>
@@ -20,8 +36,8 @@ onMounted(async () => {
     <div class="title">
       <h3>안전 팁!</h3>
     </div>
-    <div :key="idx" v-for="(tip, idx) in tips">
-      {{ tip }}
+    <div class="tip" :key="tip.tip" v-for="tip in tips">
+      {{ tip.tip }}
     </div>
   </SurfaceElement>
 </template>

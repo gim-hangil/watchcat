@@ -39,6 +39,9 @@ strong {
 a {
     color: var(--ctp-mocha-blue);
 }
+hr {
+    border: 1px solid var(--ctp-mocha-overlay1);
+}
 
 .safe-area {
     height: 3em;
