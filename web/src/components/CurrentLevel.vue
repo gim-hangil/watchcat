@@ -16,7 +16,7 @@ onMounted(async () => {
 async function fetchCurrentLevel() {
   try {
     const res = await fetch(
-      `/api/level/${props.station_id}?week=${props.week[0] || 0}`,
+      `/api/level/${props.station_id}?week_id=${props.week[0] || 0}`,
     );
     const data = await res.json();
     level.value = data.level;
