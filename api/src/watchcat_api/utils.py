@@ -66,9 +66,13 @@ def fetch_accident_type(session: db.SessionDep) -> Sequence[db.AccidentType]:
     return accident_types
 
 
-def fetch_safety_tips(session: db.SessionDep, accident_id: int) -> Sequence[db.SafetyTip]:
+def fetch_safety_tips(
+    session: db.SessionDep, accident_id: int
+) -> Sequence[db.SafetyTip]:
     try:
-        tips = session.exec(sqlmodel.select(db.SafetyTip).where(db.SafetyTip.accident_id == accident_id)).all()
+        tips = session.exec(
+            sqlmodel.select(db.SafetyTip).where(db.SafetyTip.accident_id == accident_id)
+        ).all()
     except:
         return []
     return tips
