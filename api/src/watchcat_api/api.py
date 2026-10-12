@@ -18,9 +18,7 @@ class SafetyLevel(pydantic.BaseModel):
 
 
 @app.get("/level/{station_id}")
-def get_current_safety_level(
-    session: db.SessionDep, week_id: int = 0
-) -> SafetyLevel:
+def get_current_safety_level(session: db.SessionDep, week_id: int = 0) -> SafetyLevel:
     TERM = 365 * 24 * 60 * 60
     total_accidents = len(
         session.exec(
@@ -44,8 +42,7 @@ def get_current_safety_level(
             level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2
         )
     else:
-        return SafetyLevel(
-        level=0)
+        return SafetyLevel(level=0)
 
 
 @app.get("/level/{station_id}/temperature")
@@ -62,9 +59,7 @@ def get_current_temperature_level(
 
 
 @app.get("/level/{station_id}/rain")
-def get_current_rain_level(
-    session: db.SessionDep, station_id: int
-) -> SafetyLevel:
+def get_current_rain_level(session: db.SessionDep, station_id: int) -> SafetyLevel:
     try:
         rain = utils.fetch_current_rain(session, station_id)
         return SafetyLevel(level=0 if rain < 10 else 1 if rain < 20 else 2)
@@ -73,9 +68,7 @@ def get_current_rain_level(
 
 
 @app.get("/level/{station_id}/air")
-def get_current_air_level(
-    session: db.SessionDep, station_id: int
-) -> SafetyLevel:
+def get_current_air_level(session: db.SessionDep, station_id: int) -> SafetyLevel:
     try:
         pm10 = utils.fetch_current_pm10(session, station_id)
         return SafetyLevel(level=0 if pm10 < 30 else 1 if pm10 < 80 else 2)
@@ -107,7 +100,7 @@ def get_current_most_risks(
             ).all()
         )
         if total_count > 0:
-            probability = accident_count* week_count // total_count
+            probability = accident_count * week_count // total_count
         else:
             probability = 0
         risks.append(
@@ -147,9 +140,11 @@ def get_accident_types(session: db.SessionDep) -> Sequence[db.AccidentType]:
 def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
     TERM = 365 * 24 * 60 * 60
     try:
-        currentWeekLabel = session.exec(
-            sqlmodel.select(db.Week).where(db.Week.id == week_id)
-        ).one().label
+        currentWeekLabel = (
+            session.exec(sqlmodel.select(db.Week).where(db.Week.id == week_id))
+            .one()
+            .label
+        )
     except sqlalchemy.exc.NoResultFound:
         return SafetyLevel(job="", level=0)
     total_accidents = len(
@@ -175,11 +170,10 @@ def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
         probability = possible_accidents * types_of_weeks / total_accidents
         return SafetyLevel(
             job=currentWeekLabel,
-            level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2
+            level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2,
         )
     else:
-        return SafetyLevel(
-            job=currentWeekLabel, level=0)
+        return SafetyLevel(job=currentWeekLabel, level=0)
 
 
 @app.post("/accident")
