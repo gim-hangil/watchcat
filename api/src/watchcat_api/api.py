@@ -25,15 +25,14 @@ def get_current_safety_level(
     total_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
-                db.Accident.timestamp < utils.fetch_current_timestamp(),
                 db.Accident.timestamp > utils.fetch_current_timestamp() - TERM,
             )
         ).all()
     )
+    print(week_id)
     possible_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
-                db.Accident.timestamp < utils.fetch_current_timestamp(),
                 db.Accident.timestamp > utils.fetch_current_timestamp() - TERM,
                 db.Accident.week_id == week_id,
             )
