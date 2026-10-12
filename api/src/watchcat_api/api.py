@@ -87,8 +87,8 @@ def get_current_air_level(
 def get_current_most_risks(
     session: db.SessionDep, week_id: int = 0
 ) -> Sequence[SafetyLevel]:
+    week_count = len(session.exec(sqlmodel.select(db.Week)).all())
     accident_types = session.exec(sqlmodel.select(db.AccidentType)).all()
-    total_accidents = len(session.exec(sqlmodel.select(db.Accident).where()).all())
     risks = []
     for accident_type in accident_types:
         accident_count = len(
@@ -99,8 +99,15 @@ def get_current_most_risks(
                 )
             ).all()
         )
-        if total_accidents > 0:
-            probability = accident_count // total_accidents * len(accident_types)
+        total_count = len(
+            session.exec(
+                sqlmodel.select(db.Accident).where(
+                    db.Accident.type_id == accident_type.id,
+                )
+            ).all()
+        )
+        if total_count > 0:
+            probability = accident_count* week_count // total_count
         else:
             probability = 0
         risks.append(
@@ -109,7 +116,7 @@ def get_current_most_risks(
                 level=0 if probability < 1 else 1 if probability < DANGER_FACTOR else 2,
             )
         )
-    risks.sort(key=lambda risk: risk.level)
+    risks.sort(key=lambda risk: -risk.level)
     return risks[:5]
 
 

@@ -2,12 +2,17 @@
 import { onMounted, ref } from "vue";
 import SafetyBadge from "@/components/SafetyBadge.vue";
 import SurfaceElement from "@/components/SurfaceElement.vue";
+
+const props = defineProps({
+  week: Array,
+  station_id: Number,
+});
 /* load week data from the local storage and request safety data to the server. */
 const risks = ref([]);
 
 onMounted(async () => {
   try {
-    const res = await fetch("/api/risk");
+    const res = await fetch(`/api/risk?week_id=${props.week[0]}`);
     const data = await res.json();
     risks.value = data;
   } catch (err) {
