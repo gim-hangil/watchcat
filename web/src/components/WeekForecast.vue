@@ -17,7 +17,6 @@ async function fetchSafety() {
     if (res.ok) {
       const data = await res.json();
       safety.value = data;
-      console.log(data);
     } else {
       console.error(`Failed to fetch safety data for week #${props.week_id}`);
     }
