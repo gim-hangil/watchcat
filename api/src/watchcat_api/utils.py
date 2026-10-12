@@ -16,30 +16,32 @@ def fetch_current_rain(session: db.SessionDep, station_id: int) -> float:
 
 def fetch_current_pm10(session: db.SessionDep, station_id: int) -> int:
     kma.WeatherAPI().fetch_pm10(session, fetch_current_timestamp())
-    currentPM10 = session.exec(
-        sqlmodel.select(db.PM)
-        .where(
-            db.PM.station_id == station_id
-            and db.PM.timestamp - fetch_current_timestamp() <= 30 * 60
-        )
-        .order_by(sqlmodel.col(db.PM.timestamp).desc())
-    ).first()
-    if currentPM10 is None:
+    try:
+        currentPM10 = session.exec(
+            sqlmodel.select(db.PM)
+            .where(
+                db.PM.station_id == station_id
+                and db.PM.timestamp - fetch_current_timestamp() <= 30 * 60
+            )
+            .order_by(sqlmodel.col(db.PM.timestamp).desc())
+        ).one()
+    except:
         raise Exception("No ASOS data found for the given station_id and timestamp.")
     return currentPM10.pm10
 
 
 def fetch_current_asos(session: db.SessionDep, station_id: int) -> db.ASOS:
     kma.WeatherAPI().fetch_asos(session, fetch_current_timestamp())
-    currentASOS = session.exec(
-        sqlmodel.select(db.ASOS)
-        .where(
-            db.ASOS.station_id == station_id
-            and db.ASOS.timestamp - fetch_current_timestamp() <= 30 * 60
-        )
-        .order_by(sqlmodel.col(db.ASOS.timestamp).desc())
-    ).first()
-    if currentASOS is None:
+    try:
+        currentASOS = session.exec(
+            sqlmodel.select(db.ASOS)
+            .where(
+                db.ASOS.station_id == station_id
+                and db.ASOS.timestamp - fetch_current_timestamp() <= 30 * 60
+            )
+            .order_by(sqlmodel.col(db.ASOS.timestamp).desc())
+        ).one()
+    except:
         raise Exception("No ASOS data found for the given station_id and timestamp.")
     return currentASOS
 
