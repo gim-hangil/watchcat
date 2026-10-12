@@ -70,7 +70,7 @@ function next_week() {
   let week;
   try {
     week = JSON.parse(window.localStorage.getItem("week"));
-    for (let i = 0; i < week_models.length; i++) {
+    for (let i = 0; i < week_models.length - 1; i++) {
       week_models[i].value = week_models[i + 1].value;
       week[i] = week_models[i].value;
     }
