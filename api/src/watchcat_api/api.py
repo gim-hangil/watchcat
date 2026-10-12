@@ -29,7 +29,6 @@ def get_current_safety_level(
             )
         ).all()
     )
-    print(week_id)
     possible_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
