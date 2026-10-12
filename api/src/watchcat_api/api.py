@@ -4,7 +4,6 @@ import pydantic
 import sqlalchemy.exc
 import sqlmodel
 from collections.abc import Sequence
-from typing import Annotated
 from . import db, utils
 
 app = fastapi.FastAPI()
@@ -20,7 +19,7 @@ class SafetyLevel(pydantic.BaseModel):
 
 @app.get("/level/{station_id}")
 def get_current_safety_level(
-    session: db.SessionDep, station_id: int, week_id: int = 0
+    session: db.SessionDep, week_id: int = 0
 ) -> SafetyLevel:
     TERM = 365 * 24 * 60 * 60
     total_accidents = len(
@@ -53,7 +52,7 @@ def get_current_safety_level(
 
 @app.get("/level/{station_id}/temperature")
 def get_current_temperature_level(
-    session: db.SessionDep, station_id: int, week_id: int = 0
+    session: db.SessionDep, station_id: int
 ) -> SafetyLevel:
     try:
         temperature = utils.fetchCurrentTemperature(session, station_id)
@@ -66,7 +65,7 @@ def get_current_temperature_level(
 
 @app.get("/level/{station_id}/rain")
 def get_current_rain_level(
-    session: db.SessionDep, station_id: int, week_id: int = 0
+    session: db.SessionDep, station_id: int
 ) -> SafetyLevel:
     try:
         rain = utils.fetchCurrentRain(session, station_id)
@@ -77,7 +76,7 @@ def get_current_rain_level(
 
 @app.get("/level/{station_id}/air")
 def get_current_air_level(
-    session: db.SessionDep, station_id: int, week_id: int = 0
+    session: db.SessionDep, station_id: int
 ) -> SafetyLevel:
     try:
         pm10 = utils.fetchCurrentPM10(session, station_id)
