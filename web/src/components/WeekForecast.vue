@@ -7,16 +7,17 @@ const props = defineProps({
 });
 const safety = ref({ job: "", level: 0 });
 
-onMounted(async () => {
-  await fetchSafety();
+onMounted(() => {
+  fetchSafety();
 });
 
 async function fetchSafety() {
-  if (props.week_id.value !== null && props.week_id.value !== undefined) {
+  if (props.week_id !== null && props.week_id !== undefined) {
     const res = await fetch(`/api/forecast?week_id=${props.week_id}`);
     if (res.ok) {
       const data = await res.json();
       safety.value = data;
+      console.log(data);
     } else {
       console.error(`Failed to fetch safety data for week #${props.week_id}`);
     }
