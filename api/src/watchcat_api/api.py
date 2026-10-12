@@ -123,7 +123,7 @@ def get_week_data(session: db.SessionDep) -> Sequence[db.Week]:
 
 @app.get("/station")
 def get_station_data(session: db.SessionDep) -> Sequence[db.Station]:
-    station_data = utils.fetch_station(session)
+    station_data = utils.fetch_current_station(session)
     return station_data
 
 
