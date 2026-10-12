@@ -12,7 +12,7 @@ const accident_types = ref([]);
 
 onMounted(async () => {
   checkProps();
-  await loadAccidentTypes();
+  loadAccidentTypes();
 });
 
 async function loadAccidentTypes() {

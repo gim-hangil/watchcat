@@ -15,9 +15,9 @@ week_models.forEach((model, i) => {
 const week_ids = ref([]);
 const station_ids = ref([]);
 
-onMounted(async () => {
-  await fetchWeekData();
-  await fetchStationData();
+onMounted(() => {
+  fetchWeekData();
+  fetchStationData();
 });
 
 async function fetchWeekData() {
