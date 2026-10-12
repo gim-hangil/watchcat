@@ -4,23 +4,23 @@ from collections.abc import Sequence
 from . import db, kma
 
 
-def fetchCurrentTemperature(session: db.SessionDep, station_id: int) -> float:
-    currentASOS = fetchCurrentASOS(session, station_id)
+def fetch_current_temperature(session: db.SessionDep, station_id: int) -> float:
+    currentASOS = fetch_current_asos(session, station_id)
     return currentASOS.temperature
 
 
-def fetchCurrentRain(session: db.SessionDep, station_id: int) -> float:
-    currentASOS = fetchCurrentASOS(session, station_id)
+def fetch_current_rain(session: db.SessionDep, station_id: int) -> float:
+    currentASOS = fetch_current_asos(session, station_id)
     return currentASOS.rainfall
 
 
-def fetchCurrentPM10(session: db.SessionDep, station_id: int) -> int:
-    kma.WeatherAPI().fetch_pm10(session, getCurrentTimestamp())
+def fetch_current_pm10(session: db.SessionDep, station_id: int) -> int:
+    kma.WeatherAPI().fetch_pm10(session, fetch_current_timestamp())
     currentPM10 = session.exec(
         sqlmodel.select(db.PM)
         .where(
             db.PM.station_id == station_id
-            and db.PM.timestamp - getCurrentTimestamp() <= 30 * 60
+            and db.PM.timestamp - fetch_current_timestamp() <= 30 * 60
         )
         .order_by(sqlmodel.col(db.PM.timestamp).desc())
     ).first()
@@ -29,13 +29,13 @@ def fetchCurrentPM10(session: db.SessionDep, station_id: int) -> int:
     return currentPM10.pm10
 
 
-def fetchCurrentASOS(session: db.SessionDep, station_id: int) -> db.ASOS:
-    kma.WeatherAPI().fetch_asos(session, getCurrentTimestamp())
+def fetch_current_asos(session: db.SessionDep, station_id: int) -> db.ASOS:
+    kma.WeatherAPI().fetch_asos(session, fetch_current_timestamp())
     currentASOS = session.exec(
         sqlmodel.select(db.ASOS)
         .where(
             db.ASOS.station_id == station_id
-            and db.ASOS.timestamp - getCurrentTimestamp() <= 30 * 60
+            and db.ASOS.timestamp - fetch_current_timestamp() <= 30 * 60
         )
         .order_by(sqlmodel.col(db.ASOS.timestamp).desc())
     ).first()
@@ -44,20 +44,20 @@ def fetchCurrentASOS(session: db.SessionDep, station_id: int) -> db.ASOS:
     return currentASOS
 
 
-def fetchStationData(session: db.SessionDep) -> Sequence[db.Station]:
-    kma.WeatherAPI().fetch_station(session, getCurrentTimestamp())
+def fetch_current_station(session: db.SessionDep) -> Sequence[db.Station]:
+    kma.WeatherAPI().fetch_station(session, fetch_current_timestamp())
     currentStations = session.exec(
         sqlmodel.select(db.Station)
-        .where(db.Station.timestamp - getCurrentTimestamp() <= 12 * 60 * 60)
-        .where(db.Station.timestamp - getCurrentTimestamp() >= -12 * 60 * 60)
+        .where(db.Station.timestamp - fetch_current_timestamp() <= 12 * 60 * 60)
+        .where(db.Station.timestamp - fetch_current_timestamp() >= -12 * 60 * 60)
     ).all()
     return currentStations
 
 
-def getCurrentTimestamp() -> int:
+def fetch_current_timestamp() -> int:
     return int(datetime.datetime.now().timestamp())
 
 
-def fetchAccidentType(session: db.SessionDep) -> Sequence[db.AccidentType]:
+def fetch_accident_type(session: db.SessionDep) -> Sequence[db.AccidentType]:
     accident_types = session.exec(sqlmodel.select(db.AccidentType)).all()
     return accident_types

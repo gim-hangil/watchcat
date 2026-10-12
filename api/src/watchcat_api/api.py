@@ -25,16 +25,16 @@ def get_current_safety_level(
     total_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
-                db.Accident.timestamp < utils.getCurrentTimestamp(),
-                db.Accident.timestamp > utils.getCurrentTimestamp() - TERM,
+                db.Accident.timestamp < utils.fetch_current_timestamp(),
+                db.Accident.timestamp > utils.fetch_current_timestamp() - TERM,
             )
         ).all()
     )
     possible_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
-                db.Accident.timestamp < utils.getCurrentTimestamp(),
-                db.Accident.timestamp > utils.getCurrentTimestamp() - TERM,
+                db.Accident.timestamp < utils.fetch_current_timestamp(),
+                db.Accident.timestamp > utils.fetch_current_timestamp() - TERM,
                 db.Accident.week_id == week_id,
             )
         ).all()
@@ -55,7 +55,7 @@ def get_current_temperature_level(
     session: db.SessionDep, station_id: int
 ) -> SafetyLevel:
     try:
-        temperature = utils.fetchCurrentTemperature(session, station_id)
+        temperature = utils.fetch_current_temperature(session, station_id)
         return SafetyLevel(
             level=0 if temperature < 30 else 1 if temperature < 34 else 2
         )
@@ -68,7 +68,7 @@ def get_current_rain_level(
     session: db.SessionDep, station_id: int
 ) -> SafetyLevel:
     try:
-        rain = utils.fetchCurrentRain(session, station_id)
+        rain = utils.fetch_current_rain(session, station_id)
         return SafetyLevel(level=0 if rain < 10 else 1 if rain < 20 else 2)
     except Exception:
         return SafetyLevel(level=0)
@@ -79,7 +79,7 @@ def get_current_air_level(
     session: db.SessionDep, station_id: int
 ) -> SafetyLevel:
     try:
-        pm10 = utils.fetchCurrentPM10(session, station_id)
+        pm10 = utils.fetch_current_pm10(session, station_id)
         return SafetyLevel(level=0 if pm10 < 30 else 1 if pm10 < 80 else 2)
     except Exception:
         return SafetyLevel(level=0)
@@ -123,7 +123,7 @@ def get_week_data(session: db.SessionDep) -> Sequence[db.Week]:
 
 @app.get("/station")
 def get_station_data(session: db.SessionDep) -> Sequence[db.Station]:
-    station_data = utils.fetchStationData(session)
+    station_data = utils.fetch_station(session)
     return station_data
 
 
@@ -134,7 +134,7 @@ def get_tips(session: db.SessionDep) -> list[str]:
 
 @app.get("/accident")
 def get_accident_types(session: db.SessionDep) -> Sequence[db.AccidentType]:
-    accident_type_data = utils.fetchAccidentType(session)
+    accident_type_data = utils.fetch_accident_type(session)
     return accident_type_data
 
 
@@ -150,16 +150,16 @@ def get_weekly_forecast(session: db.SessionDep, week_id: int) -> SafetyLevel:
     total_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
-                db.Accident.timestamp < utils.getCurrentTimestamp(),
-                db.Accident.timestamp > utils.getCurrentTimestamp() - TERM,
+                db.Accident.timestamp < utils.fetch_current_timestamp(),
+                db.Accident.timestamp > utils.fetch_current_timestamp() - TERM,
             )
         ).all()
     )
     possible_accidents = len(
         session.exec(
             sqlmodel.select(db.Accident).where(
-                db.Accident.timestamp < utils.getCurrentTimestamp(),
-                db.Accident.timestamp > utils.getCurrentTimestamp() - TERM,
+                db.Accident.timestamp < utils.fetch_current_timestamp(),
+                db.Accident.timestamp > utils.fetch_current_timestamp() - TERM,
                 db.Accident.week_id == week_id,
             )
         ).all()

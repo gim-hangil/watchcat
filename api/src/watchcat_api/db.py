@@ -72,7 +72,7 @@ class ASOS(sqlmodel.SQLModel, table=True):
     def from_str(cls, data: str):
         items = data.split()
         return cls(
-            timestamp=kma.WeatherAPI.timestamp_from_KST_string(items[0]),
+            timestamp=kma.WeatherAPI.timestamp_from_kst_string(items[0]),
             station_id=int(items[1]),
             atmosphere=float(items[7]),
             wind_speed=float(items[3]),
@@ -100,7 +100,7 @@ class PM(sqlmodel.SQLModel, table=True):
     def from_str(cls, data: str):
         items = data.split(",")
         return cls(
-            timestamp=kma.WeatherAPI.timestamp_from_KST_string(items[0]),
+            timestamp=kma.WeatherAPI.timestamp_from_kst_string(items[0]),
             station_id=int(items[1]),
             pm10=int(items[2]),
         )
@@ -149,7 +149,7 @@ class Accident(sqlmodel.SQLModel, table=True):
 
 
 class Week(sqlmodel.SQLModel, table=True):
-    id: int = sqlmodel.Field(primary_key=True)
+    id: int = sqlmodel.Field(primary_key=True, default=None)
     label: str
 
 

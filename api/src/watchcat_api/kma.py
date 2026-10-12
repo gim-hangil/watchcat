@@ -211,8 +211,8 @@ class WeatherAPI:
     ) -> requests.Response:
         logger.info("Requesting ASOS data to KMA API")
         # Possibly raise requests.exceptions.Timeout
-        tm1 = self.KST_datetime_from_timestamp(time_from)
-        tm2 = self.KST_datetime_from_timestamp(time_to)
+        tm1 = self.kst_datetime_from_timestamp(time_from)
+        tm2 = self.kst_datetime_from_timestamp(time_to)
         url = self.BASE_URL + "/url/kma_sfctm3.php"
         params = {
             "authKey": self.auth_key,
@@ -228,8 +228,8 @@ class WeatherAPI:
         time_to: int = 0,
     ) -> requests.Response:
         logger.info("Requesting PM10 data to KMA API")
-        tm1 = self.KST_datetime_from_timestamp(time_from)
-        tm2 = self.KST_datetime_from_timestamp(time_to)
+        tm1 = self.kst_datetime_from_timestamp(time_from)
+        tm2 = self.kst_datetime_from_timestamp(time_to)
         url = self.BASE_URL + "/url/kma_pm10.php"
         params = {
             "authKey": self.auth_key,
@@ -240,7 +240,7 @@ class WeatherAPI:
         return requests.get(url, params=params, timeout=3)
 
     def _request_station(self, timestamp: int = 0) -> requests.Response:
-        tm = self.KST_datetime_from_timestamp(timestamp)
+        tm = self.kst_datetime_from_timestamp(timestamp)
         url = self.BASE_URL + "/url/stn_inf.php"
         params = {
             "authKey": self.auth_key,
@@ -251,11 +251,11 @@ class WeatherAPI:
         return requests.get(url, params=params, timeout=3)
 
     @classmethod
-    def KST_datetime_from_timestamp(cls, timestamp: int) -> datetime.datetime:
+    def kst_datetime_from_timestamp(cls, timestamp: int) -> datetime.datetime:
         if timestamp <= 0:
             return datetime.datetime.now(cls.KST_TIMEZONE)
         return datetime.datetime.fromtimestamp(timestamp, cls.KST_TIMEZONE)
 
     @classmethod
-    def timestamp_from_KST_string(cls, kst_string: str) -> int:
+    def timestamp_from_kst_string(cls, kst_string: str) -> int:
         return int(datetime.datetime.strptime(kst_string, "%Y%m%d%H%M").timestamp())
