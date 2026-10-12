@@ -133,7 +133,6 @@ def get_tips(session: db.SessionDep, accident_id: int) -> Sequence[db.SafetyTip]
         tips = utils.fetch_safety_tips(session, accident_id)
     except:
         return []
-    print(tips)
     return tips
 
 

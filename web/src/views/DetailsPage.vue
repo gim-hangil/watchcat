@@ -15,7 +15,6 @@ onMounted(async () => {
     const res = await fetch(`/api/risk?week_id=${props.week[0]}`);
     const data = await res.json();
     risks.value = data;
-    console.log("DetailsPage updated to week", props.week[0]);
   } catch (err) {
     console.error(err.message);
   }

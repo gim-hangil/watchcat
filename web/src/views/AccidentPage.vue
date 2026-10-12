@@ -39,7 +39,6 @@ async function submit() {
     timestamp: parseInt(new Date().getTime() / 1000),
     station_id: props.station_id,
   };
-  console.log(body);
   const res = await fetch("/api/accident", {
     method: "POST",
     body: JSON.stringify(body),
